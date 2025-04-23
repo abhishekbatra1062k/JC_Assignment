@@ -1,0 +1,16 @@
+Explain how you would implement caching (e.g., for frequently accessed tasks) and message queuing (e.g., for background task processing).
+
+A. Caching (Redis)
+ - Use Redis for:
+     - Caching frequently accessed API responses (e.g., user profile, task metadata).
+     - Rate limiting (e.g., via redis-py or aioredis).
+     - Use cache-aside pattern:
+     - On GET request → check Redis → fallback to DB if cache miss → write back to Redis.
+     - Use TTL to ensure freshness.
+
+B. Message Queuing (Celery + Redis/RabbitMQ)
+ - Use Celery for:
+     - Sending emails, PDF generation, image processing, long-running ML jobs.
+ - Broker: Redis or RabbitMQ.
+ - Result Backend: Redis or a DB table.
+ - Celery worker pools run as separate pods and are horizontally scalable.
