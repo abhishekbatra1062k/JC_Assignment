@@ -1,0 +1,26 @@
+Describe how you would design the application architecture, including database design, API scalability, and authentication setup.
+
+A. Web Framework & API Layer
+ - FastAPI: Chosen for its async capabilities and high performance.
+ - Uvicorn workers: For running FastAPI with async support.
+ - Reverse Proxy: Nginx in front to handle SSL, compression, and routing.
+
+B. Database Layer
+ - PostgreSQL as the primary RDBMS, hosted via a managed service like Amazon RDS or GCP Cloud SQL.
+ - Use read replicas for scaling read operations.
+ - Use connection pooling with tools like asyncpg and SQLAlchemy 2.0 (with asyncio).
+ - Implement proper indexing, partitioning (for massive tables), and query optimization.
+
+C. Authentication & Authorization
+ - Integrate Keycloak for OAuth2 Connect support.
+ - FastAPI will delegate authentication via JWT issued by Keycloak.
+ - Use Keycloak roles and realms to implement Role-Based Access Control (RBAC).
+ - Protect endpoints using dependency injection in FastAPI based on role claims in JWT tokens.
+
+D. Scalability & High Availability
+ - Stateless APIs, deployed on containers (e.g., Docker) and orchestrated via Kubernetes.
+ - Horizontal Pod Autoscaling based on CPU/memory/queue length.
+ - Store stateful data in PostgreSQL and Redis (for cache/session state if needed).
+
+E. Monitoring & Logging
+ - Add OpenTelemetry for tracing, export data to Jaeger.
